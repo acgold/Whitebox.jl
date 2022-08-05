@@ -1,0 +1,20 @@
+name = "Whitebox"
+uuid = "b538f1be-d065-4026-b484-95330fe3abdc"
+authors = ["Adam Gold"]
+version = "0.1.0"
+
+[deps]
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+WhiteboxTools_jll = "8bca1bde-e0b5-5803-b535-ac666483fcca"
+ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
+
+[compat]
+WhiteboxTools_jll = "2.0"
+ZipFile "0.10"
+julia = "1.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
