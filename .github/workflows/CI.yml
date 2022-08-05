@@ -55,6 +55,6 @@ jobs:
       - run: |
           julia --project=docs -e '
             using Documenter: DocMeta, doctest
-            using SimpleFeatures
-            DocMeta.setdocmeta!(SimpleFeatures, :DocTestSetup, :(using SimpleFeatures); recursive=true)
-            doctest(SimpleFeatures)'
+            using Whitebox
+            DocMeta.setdocmeta!(Whitebox, :DocTestSetup, :(using Whitebox); recursive=true)
+            doctest(Whitebox)'

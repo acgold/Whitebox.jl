@@ -18,9 +18,9 @@ All functions can be performed using the`run_tools` function.
 ```julia
 wbt = WhiteboxTools()
 tool_name = "centroid_vector"
-args = ["-i=Data/polygons.shp", "-o=Data/centroids.shp"]
+args = ["-i=Data/polygons.shp", "--overlay=Data/buff_centroid.shp", "-o=Data/int_test.shp"]
 
-z = run_tool(wbt, "intersect"; args=["-i=Data/polygons.shp", "--overlay=Data/buff_centroid.shp", "-o=Data/int_test.shp"])
+z = run_tool(wbt, "intersect"; args=args)
 ```
 ```julia
 ****************************
