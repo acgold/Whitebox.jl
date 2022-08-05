@@ -10,7 +10,7 @@ ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 
 [compat]
 WhiteboxTools_jll = "2.0"
-ZipFile "0.10"
+ZipFile = "0.10"
 julia = "1.6"
 
 [extras]
