@@ -1,6 +1,8 @@
 import WhiteboxTools_jll as WBT_jll
 using Downloads
 using ZipFile
+using OutputCollectors
+using DefaultApplication
 
 ###############################################
 ####### Additional license information ########
