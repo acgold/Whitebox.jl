@@ -1,7 +1,68 @@
-
 import WhiteboxTools_jll as WBT_jll
 using Downloads
 using ZipFile
+
+###############################################
+####### Additional license information ########
+###############################################
+
+# The WhiteboxTools_jll.jl package was created by BinaryBuilder.jl (https://github.com/JuliaBinaryWrappers/WhiteboxTools_jll.jl)
+# and wraps the MIT-licensed WhiteboxTools software by Dr. John Lindsay. The license information for WhiteboxTools is shown below
+# and linked here: https://github.com/jblindsay/whitebox-tools/blob/master/LICENSE.txt.
+#
+# "The MIT License (MIT)
+
+# Copyright (c) 2017-2021 John Lindsay
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE."
+
+
+# Code in this file was adapted to Julia from the Python frontend for WhiteboxTools, and most
+# function descriptions were copied directly (https://github.com/giswqs/whitebox-python). The
+# license information for the Python frontend of WhiteboxTools is shown below and is linked 
+# here: https://github.com/giswqs/whitebox-python/blob/master/LICENSE).
+#
+# "MIT License
+#
+# Copyright (c) 2018, Qiusheng Wu
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE."
+
+###########################
+####### Julia code ########
+###########################
 
 """
     default_callback(value)
@@ -58,40 +119,40 @@ end
 
 
 """
-    set_whitebox_dir(path_str::String)
+    set_whitebox_dir(path_str::String, wbt_info::WhiteboxTools = wbt_info)
 
 Sets the directory to the WhiteboxTools executable file.
 """
-function set_whitebox_dir(wbt::WhiteboxTools, path_str::String)
-    wbt.exe_path = path_str
+function set_whitebox_dir(path_str::String, wbt_info::WhiteboxTools = wbt_info)
+    wbt_info.exe_path = path_str
 end
 
 
 """
-    set_working_dir(wbt::WhiteboxTools, path_str::String)
+    set_working_dir(path_str::String, wbt_info::WhiteboxTools = wbt_info)
 
 Sets the working directory, i.e. the directory in which
 the data files are located. By setting the working 
 directory, tool input parameters that are files need only
 specify the file name rather than the complete file path.
 """
-function set_working_dir(wbt::WhiteboxTools, path_str::String)
-    wbt.work_dir = normpath(path_str)
+function set_working_dir(path_str::String, wbt_info::WhiteboxTools = wbt_info)
+    wbt_info.work_dir = normpath(path_str)
 end
 
 
-# """
-#     set_whitebox_dir(path_str::String)
+"""
+    set_whitebox_dir(path_str::String, wbt_info::WhiteboxTools = wbt_info)
 
-# Sets the directory to the WhiteboxTools executable file.
-# """
-# function set_whitebox_dir(wbt::WhiteboxTools, path_str::String)
-#     wbt.exe_path = path_str
-# end
+Sets the directory to the WhiteboxTools executable file.
+"""
+function set_whitebox_dir(path_str::String, wbt_info::WhiteboxTools = wbt_info)
+    wbt_info.exe_path = path_str
+end
 
 
 """
-    set_verbose_mode(wbt::WhiteboxTools, val::Bool=true)
+    set_verbose_mode(val::Bool=true, wbt_info::WhiteboxTools = wbt_info)
 
 Sets verbose mode. If verbose mode is False, tools will not
 print output messages. Tools will frequently provide substantial
@@ -100,28 +161,27 @@ various sub-routines. When the user has scripted a workflow
 that ties many tools in sequence, this level of tool output
 can be problematic. By setting verbose mode to False, these
 """
-function set_verbose_mode(wbt::WhiteboxTools, val::Bool=true)
+function set_verbose_mode(val::Bool=true, wbt_info::WhiteboxTools = wbt_info)
 
-    wbt.verbose = val
+    wbt_info.verbose = val
 
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
-    if wbt.verbose === true
+    if wbt_info.verbose === true
         push!(args2, "-v")
     else
         push!(args2, "-v=false")
     end
 
-    callback(strip(join(args2, " ")))
+    wbt_info.default_callback(strip(join(args2, " ")))
 
     proc = nothing
 
     proc = run(`$args2`, wait=true)
 
     if success(proc) === true
-        println("Success!")
         return 0
     else
         error("There was a problem.")
@@ -131,40 +191,40 @@ end
 
 
 """
-    set_compress_rasters(wbt::WhiteboxTools, compress_rasters::Bool)
+    set_compress_rasters(compress_rasters::Bool, wbt_info::WhiteboxTools = wbt_info)
     
 Sets the flag used by WhiteboxTools to determine whether to use compression for output rasters.
 """
-function set_compress_rasters(wbt::WhiteboxTools, compress_rasters::Bool)
-    wbt.__compress_rasters = compress_rasters
+function set_compress_rasters(compress_rasters::Bool, wbt_info::WhiteboxTools = wbt_info)
+    wbt_info.__compress_rasters = compress_rasters
 end
 
-function get_compress_rasters(wbt::WhiteboxTools)
-    return wbt.__compress_rasters
+function get_compress_rasters(wbt_info::WhiteboxTools=wbt_info)
+    return wbt_info.__compress_rasters
 end
 
 
 """
-    run_tool(wbt::WhiteboxTools, tool_name::String; callback=nothing, args::Union{Nothing, Vector{String}}=nothing)
+    run_tool(tool_name::String, wbt_info::WhiteboxTools = wbt_info; callback=nothing, args::Union{Nothing, Vector{Any}}=nothing)
 
 Runs a tool and specifies tool arguments.
 Returns 0 if completes without error.
 Returns 1 on error with details.
 # Returns 2 if process is cancelled by user.
 """
-function run_tool(wbt::WhiteboxTools, tool_name::String; callback=nothing, args::Union{Nothing,Vector{String}}=nothing)
+function run_tool(tool_name::String, wbt_info::WhiteboxTools = wbt_info; callback=nothing, args::Union{Nothing,Vector{Any}}=nothing)
     if callback === nothing
-        callback = wbt.default_callback
+        callback = wbt_info.default_callback
     end
 
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "--run=" * to_camelcase(tool_name))
 
-    if strip(wbt.work_dir) !== ""
-        push!(args2, "--wd=" * wbt.work_dir)
+    if strip(wbt_info.work_dir) !== ""
+        push!(args2, "--wd=" * wbt_info.work_dir)
     end
 
     if args !== nothing
@@ -173,11 +233,11 @@ function run_tool(wbt::WhiteboxTools, tool_name::String; callback=nothing, args:
         end
     end
 
-    if wbt.__compress_rasters === true
+    if wbt_info.__compress_rasters === true
         push!(args, "--compress_rasters")
     end
 
-    if wbt.verbose === true
+    if wbt_info.verbose === true
         cl = join(args2, " ")
         callback(strip(cl))
     end
@@ -196,39 +256,37 @@ function run_tool(wbt::WhiteboxTools, tool_name::String; callback=nothing, args:
 end
 
 """
-    help(wbt::WhiteboxTools)
+    help(wbt_info::WhiteboxTools = wbt_info)
 
 Retrieves the help description for WhiteboxTools.
 """
-function help(wbt::WhiteboxTools)
+function help(wbt_info::WhiteboxTools = wbt_info)
 
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "-h")
 
     proc = run(`$args2`, wait=true)
 
     if success(proc) === true
-        println("Success!")
-        return 0
+        return
     else
         error("There was a problem.")
-        return 1
     end
 end
 
 
 """
-    license(wbt::WhiteboxTools, tool_name::Union{Nothing, String} = nothing)
+    license(tool_name::Union{Nothing, String} = nothing, wbt_info::WhiteboxTools = wbt_info)
 
 Retrieves the license information for WhiteboxTools.
 """
-function license(wbt::WhiteboxTools, tool_name::Union{Nothing,String}=nothing)
+function license(tool_name::Union{Nothing,String}=nothing, wbt_info::WhiteboxTools = wbt_info)
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "--license")
 
@@ -247,14 +305,14 @@ end
 
 
 """
-    version(wbt::WhiteboxTools)
+    version(wbt_info::WhiteboxTools = wbt_info)
 
 Retrieves the version information for WhiteboxTools.
 """
-function version(wbt::WhiteboxTools)
+function version(wbt_info::WhiteboxTools = wbt_info)
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "--version")
 
@@ -269,14 +327,14 @@ end
 
 
 """
-    tool_help(wbt::WhiteboxTools, tool_name::String)
+    tool_help(tool_name::String, wbt_info::WhiteboxTools = wbt_info)
 
 Retrieves the help description for a specific tool.
 """
-function tool_help(wbt::WhiteboxTools, tool_name::String)
+function tool_help(tool_name::String, wbt_info::WhiteboxTools = wbt_info)
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "--toolhelp=" * to_camelcase(tool_name))
 
@@ -291,14 +349,14 @@ end
 
 
 """
-    tool_parameters(wbt::WhiteboxTools, tool_name::String)
+    tool_parameters(tool_name::String, wbt_info::WhiteboxTools = wbt_info; return_obj::Bool = false)
 
 Retrieves the tool parameter descriptions for a specific tool.
 """
-function tool_parameters(wbt::WhiteboxTools, tool_name::String)
+function tool_parameters(tool_name::String, wbt_info::WhiteboxTools = wbt_info)
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "--toolhelp=" * to_camelcase(tool_name))
 
@@ -313,14 +371,14 @@ end
 
 
 """
-    toolbox(wbt::WhiteboxTools, tool_name::String)
+    toolbox(tool_name::String="", wbt_info::WhiteboxTools = wbt_info; return_obj::Bool=false)
 
-Retrieves the tool parameter descriptions for a specific tool.
+Retrieves the toolbox for a specific tool.
 """
-function toolbox(wbt::WhiteboxTools, tool_name::String="")
+function toolbox(tool_name::String="", wbt_info::WhiteboxTools = wbt_info)
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "--toolbox=" * to_camelcase(tool_name))
 
@@ -335,36 +393,41 @@ end
 
 
 """
-    view_code(wbt::WhiteboxTools, tool_name::String)
+    view_code(tool_name::String, wbt_info::WhiteboxTools = wbt_info)
 
 Opens a web browser to view the source code for a specific tool
 on the projects source code repository.
 """
-function view_code(wbt::WhiteboxTools, tool_name::String)
+function view_code(tool_name::String, wbt_info::WhiteboxTools = wbt_info)
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "--viewcode=" * to_camelcase(tool_name))
 
-    proc = run(`$args2`, wait=true)
+    proc = OutputCollectors.OutputCollector(`$args2`, verbose=false);
 
-    if success(proc) === true
-        return
+    is_success = wait(proc)
+
+    if is_success === true
+        out = collect_stdout(proc)
+        DefaultApplication.open(chomp(out))
+        return 
     else
-        error("There was a problem.")
+        error(collect_stderr(proc))
     end
 end
 
+
 """
-    list_tools(wbt::WhiteboxTools, tool_name::String)
+    list_tools(keywords::Vector{String}=[""], wbt_info::WhiteboxTools = wbt_info; return_obj::Bool = false)
 
 Lists all available tools in WhiteboxTools.
 """
-function list_tools(wbt::WhiteboxTools, keywords::Vector{String})
+function list_tools(keywords::Vector{String}=[""], wbt_info::WhiteboxTools = wbt_info; return_obj::Bool = false)
     args2 = []
 
-    push!(args2, wbt.exe_path)
+    push!(args2, wbt_info.exe_path)
 
     push!(args2, "--listtools=")
 
@@ -374,12 +437,23 @@ function list_tools(wbt::WhiteboxTools, keywords::Vector{String})
         end
     end
 
-    proc = run(`$args2`, wait=true)
+    proc = OutputCollectors.OutputCollector(`$args2`, verbose=false);
 
-    if success(proc) === true
-        return
+    is_success = wait(proc)
+
+    if is_success === true
+        out = collect_stdout(proc)
+
+        if return_obj === false
+            println(out)
+            return nothing
+        end
+
+        tool_list = String.(reduce(vcat, split.(out, "\n")));
+        popfirst!(tool_list);
+        return tool_list[tool_list .!== ""]
     else
-        error("There was a problem.")
+        error(collect_stderr(proc))
     end
 end
 
@@ -423,11 +497,11 @@ function activate_license()
 end
 
 
-function install_wbt_extension(wbt::WhiteboxTools, ext_name::String="")
+function install_wbt_extension(ext_name::String="", wbt_info::WhiteboxTools = wbt_info)
     try
         if length(ext_name) === 0
             printstyled("Which extension would you like to install? (gte/lidar/dem/agri)\n", color=:yellow)
-            ext_name = readline()
+            ext_name = readline();
         end
 
         # Figure out the appropriate URL to download the extension binary from.
@@ -509,9 +583,9 @@ function install_wbt_extension(wbt::WhiteboxTools, ext_name::String="")
 
         # Does the user want to register an activation key for this extension?
         printstyled("Would you like to activate a license key for the extension now? (Y/n) \n", color=:yellow)
-        reply = readline()
+        reply = readline();
 
-        if "y" in lowercase(reply)
+        if occursin("y", lowercase(reply))
             activate_license()
         else
             println(
@@ -525,21 +599,3 @@ function install_wbt_extension(wbt::WhiteboxTools, ext_name::String="")
         println("Please contact support@whiteboxgeo.com if you continue to experience issues.")
     end
 end
-
-#-------- To Do -------------
-# Convert this to julia from python:
-# https://github.com/jblindsay/whitebox-tools/blob/master/whitebox_plugin_generator.py
-
-#-------- Adam's Code ---------
-
-# wbt = WhiteboxTools()
-# tool_name = "centroid_vector"
-# args = ["-i=Data/polygons.shp", "-o=Data/centroids.shp"]
-
-# z = run_tool(wbt, "intersect"; args=["-i=Data/polygons.shp", "--overlay=Data/buff_centroid.shp", "-o=Data/int_test.shp"])
-
-# run_tool(wbt, "clip_raster_to_polygon"; args=["-i=Data/class_error.tif", "--polygons=Data/extent.shp", "-o=class_error_clipped.shp"])
-
-# run_tool(wbt, "raster_to_vector_polygons"; args=["-i=Data/class_error.tif", "-o=class_error.shp"])
-
-
