@@ -2,7 +2,7 @@
 
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://acgold.github.io/Whitebox.jl/dev/)
 [![Build Status](https://github.com/acgold/Whitebox.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/acgold/Whitebox.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/acgold/Whitebox.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/acgold/Whitebox.jl)
+<!-- [![Coverage](https://codecov.io/gh/acgold/Whitebox.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/acgold/Whitebox.jl) -->
 
 ## A Julia frontend for WhiteboxTools
 
@@ -10,15 +10,21 @@
 
 **Whitebox.jl** installs **WhiteboxTools** and allows users to run any **WhiteboxTools** function from Julia.
 
+### Notes
+
+- **Whitebox.jl** is not affiliated with **WhiteboxTools**. 
+- This package is in active development and testing.
+- Report bugs [here](https://github.com/acgold/Whitebox.jl/issues).
+
 # Installation
 
 **Whitebox.jl** can be installed directly from GitHub:
 
 ```julia
 using Pkg
-Pkg.add(https://github.com/acgold/Whitebox.jl.git)
+Pkg.add(url = "https://github.com/acgold/Whitebox.jl.git")
 ```
-Installing **Whitebox.jl** will automatically install a version of **WhiteboxTools** within the **Whitebox.jl** package directory (see more about this in [How it works](@ref))
+Installing **Whitebox.jl** will automatically install a version of **WhiteboxTools** within the **Whitebox.jl** package directory (see more about this in [How it works](https://acgold.github.io/Whitebox.jl/dev/how_it_works)
 
 # Quick Example
 
@@ -77,7 +83,7 @@ In other words, just load the package and you should be good to go! Read more ab
 
 For example, to use the [`AbsoluteValue` tool](https://www.whiteboxgeo.com/manual/wbt_book/available_tools/mathand_stats_tools.html?highlight=AbsoluteValue#absolutevalue), you would use `wbt.absolute_value()`. 
 
-View the **Whitebox.jl** [Reference](@ref) section for a full list of available functions and documentation. 
+View the **Whitebox.jl** [Reference](https://acgold.github.io/Whitebox.jl/dev/reference) section for a full list of available functions and documentation. 
 
 ## Run tools
 
