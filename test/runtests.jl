@@ -1,6 +1,7 @@
-using Whitebox
+import Whitebox as wbt
 using Test
 
-@testset "Whitebox.jl" begin
-    # Write your tests here.
+
+@testset "Whitebox tests" begin
+    
 end
