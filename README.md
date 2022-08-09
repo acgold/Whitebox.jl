@@ -8,7 +8,7 @@
 
 [WhiteboxTools](https://github.com/jblindsay/whitebox-tools) is an open-source command-line program for geospatial analysis created by [Dr. John Lindsay](https://jblindsay.github.io/ghrg/index.html).
 
-**Whitebox.jl** installs **WhiteboxTools** and allows users to run any **WhiteboxTools** function from Julia.
+**Whitebox.jl** installs **WhiteboxTools** (**v2.1.0**) and allows users to run any **WhiteboxTools** function from Julia.
 
 ### Notes
 

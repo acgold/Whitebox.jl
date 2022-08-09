@@ -13,7 +13,7 @@ ZipFile = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 [compat]
 DefaultApplication = "1.1"
 OutputCollectors = "0.1"
-WhiteboxTools_jll = "2.0"
+WhiteboxTools_jll = "2.1"
 ZipFile = "0.10"
 julia = "1.6"
 
