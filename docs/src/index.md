@@ -24,7 +24,13 @@ CurrentModule = Whitebox
 
 # Installation
 
-**Whitebox.jl** can be installed directly from GitHub:
+**Whitebox.jl** can be installed from the Pkg REPL (press `]` in the Julia REPL):
+
+```julia
+pkg> add Whitebox
+```
+
+Or directly from GitHub:
 
 ```julia
 using Pkg
