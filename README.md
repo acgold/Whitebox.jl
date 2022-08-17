@@ -18,13 +18,19 @@
 
 # Installation
 
-**Whitebox.jl** can be installed directly from GitHub:
+**Whitebox.jl** can be installed from the Pkg REPL (press `]` in the Julia REPL):
+
+```julia
+pkg> add Whitebox
+```
+
+Or directly from GitHub:
 
 ```julia
 using Pkg
 Pkg.add(url = "https://github.com/acgold/Whitebox.jl.git")
 ```
-Installing **Whitebox.jl** will automatically install a version of **WhiteboxTools** within the **Whitebox.jl** package directory (see more about this in [How it works](https://acgold.github.io/Whitebox.jl/dev/how_it_works)
+Installing **Whitebox.jl** will automatically install a version of **WhiteboxTools** within the **Whitebox.jl** package directory (see more about this in [How it works](https://acgold.github.io/Whitebox.jl/dev/how_it_works))
 
 # Quick Example
 
